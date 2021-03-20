@@ -1,0 +1,21 @@
+{
+  "name": "endless-runner",
+  "version": "1.0.0",
+  "description": "The player runs endlessly except otherwise collided with thorns",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "watch": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kingobaino1/endless-runner.git"
+  },
+  "author": "Ibeh Kingsley",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kingobaino1/endless-runner/issues"
+  },
+  "homepage": "https://github.com/Kingobaino1/endless-runner#readme"
+}
