@@ -1,8 +1,11 @@
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
+const { resourceUsage } = require('process');
 
 module.exports = {
   mode: 'development',
-  devtool: 'inline-source-map',
+  devtool: 'eval-source-map',
   entry: './src/index.js',
   output: {
     filename: 'bundle.js',
@@ -18,26 +21,45 @@ module.exports = {
         ],
       },
       {
-        test: /\.(png|jpeg|jpg|svg|gif|mov|mp4)$/i,
-        use: {
-          loader: 'file-loader',
-          options: {
-            outputPath: 'media',
-            name: '[name].[ext]',
-          },
-        },
+        test: /\.(gif|png|jpe?g|svg|xml)$/i,
+        loader: 'url-loader',
+        options: {
+          limit: 100000
+        }
       },
-    ],
-  },
-  module: {
-    rules: [
+      {
+        test: [/\.vert$/, /\.frag$/],
+        use: "raw-loader"
+      },
       {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
         },
       },
     ],
   },
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 9000,
+  },
+  plugins: [
+      new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, './src/assets', '**', '*'),
+          to: path.resolve(__dirname, 'dist/assets'),
+        },
+      ],
+    }),
+    new webpack.DefinePlugin({
+      'typeof CANVAS_RENDERER': JSON.stringify(true),
+      'typeof WEBGL_RENDERER': JSON.stringify(true)
+    }),
+  ]
 };
