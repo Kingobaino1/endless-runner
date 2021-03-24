@@ -1,5 +1,5 @@
 import 'phaser';
-// import image from '../assets/logo.png';
+
 export default class GameScene extends Phaser.Scene {
   constructor() {
     super('Game');
@@ -7,12 +7,17 @@ export default class GameScene extends Phaser.Scene {
 
   preload()
   {
-    this.load.image('logo', 'success.jpg');
+    this.load.image('background', 'back.jpg');
+    this.load.image('sky', 'sky.png');
+    this.load.image('backdrop', 'backdrop.png');
   }
 
   create()
   {
-    this.add.text(400, 320, 'Game');
-    this.add.image(400, 300, 'logo');
+    let background = this.add.image(0, 0, 'background');
+    background.displayHeight = this.sys.game.config.height;
+    background.scaleX = background.scaleY;
+    background.y = this.sys.game.config.height/2;
+    background.x = this.sys.game.config.width/2;
   }
 }
