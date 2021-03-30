@@ -21,11 +21,10 @@ export default class GameScene extends Phaser.Scene {
     this.load.image('sky', 'sky.png');
     this.load.image('backdrop', 'backdrop.png');
     this.load.image("platform", "grass.png");
-    this.load.image('ground', 'backdrop_ground.png');
     this.load.image('water', 'water.png');
     this.player = this.load.spritesheet('player', 
         'normal_walk.png',
-        { frameWidth: 60, frameHeight: 85 }
+        { frameWidth: 60, frameHeight: 95 }
     );
   }
 
@@ -36,8 +35,13 @@ export default class GameScene extends Phaser.Scene {
     this.sky = this.add.tileSprite(400, 240, 800, 480, 'sky');
     this.backdrop = this.add.tileSprite(400, 240, 800, 480, 'backdrop');
     this.water = this.add.tileSprite(400, 465, 800, 32, 'water').setScale(1);
+
+    this.player = this.physics.add.sprite(gameOptions.playerStartPosition, this.sys.game.config.height / 2, "player");
+    this.player.setGravityY(gameOptions.playerGravity);
     
       // group with all active platforms.
+
+
         
         this.platformGroup = this.add.group({
              
@@ -63,8 +67,14 @@ export default class GameScene extends Phaser.Scene {
         this.addPlatform(this.sys.game.config.width, this.sys.game.config.width / 2);
  
         // adding the player;
-        this.player = this.physics.add.sprite(gameOptions.playerStartPosition, this.sys.game.config.height / 2, "player");
-        this.player.setGravityY(gameOptions.playerGravity);
+        
+
+        this.anims.create({
+        key: 'run',
+        frames: this.anims.generateFrameNumbers('player'),
+        frameRate: 16,
+        // repeat: -1
+    });
  
         // setting collisions between the player and the platform group
         this.physics.add.collider(this.player, this.platformGroup);
@@ -72,7 +82,7 @@ export default class GameScene extends Phaser.Scene {
  
         // checking for input
        
-        this.input.on("pointerdown", this.jump, this);
+        this.input.keyboard.on("keydown-UP", this.jump, this);
     }
  
     // the core of the script: platform are added from the pool or created on the fly
@@ -108,35 +118,41 @@ export default class GameScene extends Phaser.Scene {
 
   update()
   {
-          this.tileSprite.tilePositionX += 1;
-          this.sky.tilePositionX += 1;
-          this.water.tilePositionX += 1
+      
+    if (this.player.body.touching.down) {
+      this.player.anims.play('run', true);
+    }
 
-        if(this.player.y > this.sys.game.config.height){
-            // this.scene.start('Game');
-            this.add.text(400, 300, 'Game Over')
 
-            // this.scene.start('Title')
-            
+    this.tileSprite.tilePositionX += 1;
+    this.sky.tilePositionX += 1;
+    this.water.tilePositionX += 1;
+    this.backdrop.tilePositionX += .25;
+
+    if(this.player.y > this.sys.game.config.height){
+        // this.scene.start('Game');
+        this.add.text(400, 300, 'Game Over')
+        // this.scene.start('Title')
+        
+    }
+    this.player.x = gameOptions.playerStartPosition;
+
+    // recycling platforms
+    let minDistance = this.sys.game.config.width;
+    this.platformGroup.getChildren().forEach(function(platform){
+        let platformDistance = game.config.width - platform.x - platform.displayWidth / 2;
+        minDistance = Math.min(minDistance, platformDistance);
+        if(platform.x < - platform.displayWidth / 2){
+            this.platformGroup.killAndHide(platform);
+            this.platformGroup.remove(platform);
         }
-        this.player.x = gameOptions.playerStartPosition;
- 
-        // recycling platforms
-        let minDistance = this.sys.game.config.width;
-        this.platformGroup.getChildren().forEach(function(platform){
-            let platformDistance = game.config.width - platform.x - platform.displayWidth / 2;
-            minDistance = Math.min(minDistance, platformDistance);
-            if(platform.x < - platform.displayWidth / 2){
-                this.platformGroup.killAndHide(platform);
-                this.platformGroup.remove(platform);
-            }
-        }, this);
- 
-        // adding new platforms
-        if(minDistance > this.nextPlatformDistance){
-            var nextPlatformWidth = Phaser.Math.Between(gameOptions.platformSizeRange[0], gameOptions.platformSizeRange[1]);
-            this.addPlatform(nextPlatformWidth, game.config.width + nextPlatformWidth / 2);
-        }
+    }, this);
+
+    // adding new platforms
+    if(minDistance > this.nextPlatformDistance){
+        var nextPlatformWidth = Phaser.Math.Between(gameOptions.platformSizeRange[0], gameOptions.platformSizeRange[1]);
+        this.addPlatform(nextPlatformWidth, game.config.width + nextPlatformWidth / 2);
+    }
     }
 
     resize(){
