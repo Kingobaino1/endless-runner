@@ -7,7 +7,8 @@ let gameOptions = {
     playerGravity: 900,
     jumpForce: 400,
     playerStartPosition: 200,
-    jumps: 2
+    jumps: 2,
+    score: 0,
 }
 
 export default class GameScene extends Phaser.Scene {
@@ -22,6 +23,7 @@ export default class GameScene extends Phaser.Scene {
     this.load.image('backdrop', 'backdrop.png');
     this.load.image("platform", "grass.png");
     this.load.image('water', 'water.png');
+    this.load.image('star', 'star.png');
     this.player = this.load.spritesheet('player', 
         'normal_walk.png',
         { frameWidth: 60, frameHeight: 95 }
@@ -38,6 +40,9 @@ export default class GameScene extends Phaser.Scene {
 
     this.player = this.physics.add.sprite(gameOptions.playerStartPosition, this.sys.game.config.height / 2, "player");
     this.player.setGravityY(gameOptions.playerGravity);
+    this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+
+
     
       // group with all active platforms.
 
@@ -73,7 +78,6 @@ export default class GameScene extends Phaser.Scene {
         key: 'run',
         frames: this.anims.generateFrameNumbers('player'),
         frameRate: 16,
-        // repeat: -1
     });
  
         // setting collisions between the player and the platform group
@@ -83,7 +87,29 @@ export default class GameScene extends Phaser.Scene {
         // checking for input
        
         this.input.keyboard.on("keydown-UP", this.jump, this);
+
+        this.stars = this.physics.add.group({
+          key: 'star',
+          repeat: 5,
+          setXY: { x: 400, y: 240, stepX: 100 }
+        });
+
+
+        this.stars.children.iterate(function (child) {
+          child.setBounceY(0);
+          child.setGravityY(100);
+        });
+       this.physics.add.collider(this.stars, this.platformGroup);
+       this.physics.add.overlap(this.player, this.stars, collectStar, null, this);
+
+       function collectStar (player, star)
+       {
+          star.disableBody(true, true);
+          gameOptions.score += 100;
+          this.scoreText.setText('Score: ' + gameOptions.score);
+       }
     }
+
  
     // the core of the script: platform are added from the pool or created on the fly
     addPlatform(platformWidth, posX){
@@ -118,21 +144,19 @@ export default class GameScene extends Phaser.Scene {
 
   update()
   {
-      
     if (this.player.body.touching.down) {
       this.player.anims.play('run', true);
     }
 
-
     this.tileSprite.tilePositionX += 1;
-    this.sky.tilePositionX += 1;
-    this.water.tilePositionX += 1;
-    this.backdrop.tilePositionX += .25;
+    this.sky.tilePositionX += .25;
+    this.water.tilePositionX += .5;
+    this.backdrop.tilePositionX += .5;
 
     if(this.player.y > this.sys.game.config.height){
         // this.scene.start('Game');
-        this.add.text(400, 300, 'Game Over')
-        // this.scene.start('Title')
+        this.add.text(400, 300, 'Game Over', { fontsize: 32, fill: 'red' })
+        // this.scene.start('Score');
         
     }
     this.player.x = gameOptions.playerStartPosition;

@@ -7,6 +7,7 @@ export default {
   height: 480,
   physics: {
     default: 'arcade',
-    debug: true,
+    gravity: { y: 300 },
+    debug: false,
   }
 };
