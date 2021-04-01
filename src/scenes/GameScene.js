@@ -1,4 +1,6 @@
 import 'phaser';
+import { populateScore } from '../Config/leaderboardApi';
+
 
 let gameOptions = {
     platformStartSpeed: 350,
@@ -154,9 +156,18 @@ export default class GameScene extends Phaser.Scene {
     this.backdrop.tilePositionX += .5;
 
     if(this.player.y > this.sys.game.config.height){
-        // this.scene.start('Game');
-        this.add.text(400, 300, 'Game Over', { fontsize: 32, fill: 'red' })
-        // this.scene.start('Score');
+        // this.scene.stop();
+        this.add.text(400, 300, 'Game Over', { fontsize: 48, fill: 'red' })
+        const name = prompt('Please enter your name', 'Ikechukwu');
+        if(name === null){
+            this.scene.stop();
+            this.scene.start('Title');
+        } else if(name !== ''){
+           populateScore(name, gameOptions.score);
+           this.scene.start('Score')
+        } else {
+            alert('Please input a valid character')
+        }
         
     }
     this.player.x = gameOptions.playerStartPosition;

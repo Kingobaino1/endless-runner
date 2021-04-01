@@ -14,6 +14,7 @@ export default class PreloaderScene extends Phaser.Scene {
   this.load.image('backdrop', 'backdrop.png');
   this.load.image("platform", "grass.png");
   this.load.image('water', 'water.png');
+  this.load.image('back', 'back.png')
  
   // display progress bar
   var progressBar = this.add.graphics();
