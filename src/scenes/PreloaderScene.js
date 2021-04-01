@@ -14,7 +14,10 @@ export default class PreloaderScene extends Phaser.Scene {
   this.load.image('backdrop', 'backdrop.png');
   this.load.image("platform", "grass.png");
   this.load.image('water', 'water.png');
-  this.load.image('back', 'back.png')
+  this.load.image('back', 'back.png');
+  this.load.audio('bgMusic', ['bg_music.mp3']);
+  this.load.audio('playerMusic', ['player_move.mp3']);
+
  
   // display progress bar
   var progressBar = this.add.graphics();

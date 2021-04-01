@@ -30,11 +30,18 @@ export default class GameScene extends Phaser.Scene {
         'normal_walk.png',
         { frameWidth: 60, frameHeight: 95 }
     );
+    this.load.audio('playerMusic', ['player_move.mp3']);
+    // this.load.audio('bgMusic', ['bg_music.mp3']);
+
+
   }
 
   create()
   {
-    
+    this.playerMove = this.sound.add('playerMusic', { loop: false });
+    // this.bgMusic = this.sound.add('bgMusic', { loop: false });
+    // this.bgMusic.stop();
+    this.playerMove.play();
     this.tileSprite = this.add.tileSprite(400, 240, 800, 480, 'background');
     this.sky = this.add.tileSprite(400, 240, 800, 480, 'sky');
     this.backdrop = this.add.tileSprite(400, 240, 800, 480, 'backdrop');
@@ -156,14 +163,15 @@ export default class GameScene extends Phaser.Scene {
     this.backdrop.tilePositionX += .5;
 
     if(this.player.y > this.sys.game.config.height){
-        // this.scene.stop();
         this.add.text(400, 300, 'Game Over', { fontsize: 48, fill: 'red' })
         const name = prompt('Please enter your name', 'Ikechukwu');
         if(name === null){
             this.scene.stop();
+            this.playerMove.stop();
             this.scene.start('Title');
         } else if(name !== ''){
            populateScore(name, gameOptions.score);
+           this.playerMove.stop();
            this.scene.start('Score')
         } else {
             alert('Please input a valid character')
@@ -171,8 +179,6 @@ export default class GameScene extends Phaser.Scene {
         
     }
     this.player.x = gameOptions.playerStartPosition;
-
-    // recycling platforms
     let minDistance = this.sys.game.config.width;
     this.platformGroup.getChildren().forEach(function(platform){
         let platformDistance = game.config.width - platform.x - platform.displayWidth / 2;
@@ -182,8 +188,6 @@ export default class GameScene extends Phaser.Scene {
             this.platformGroup.remove(platform);
         }
     }, this);
-
-    // adding new platforms
     if(minDistance > this.nextPlatformDistance){
         var nextPlatformWidth = Phaser.Math.Between(gameOptions.platformSizeRange[0], gameOptions.platformSizeRange[1]);
         this.addPlatform(nextPlatformWidth, game.config.width + nextPlatformWidth / 2);
