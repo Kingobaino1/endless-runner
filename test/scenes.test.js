@@ -11,19 +11,19 @@ describe('Scenes are functions test', () => {
   it('Boot Scene is a function', () => {
     expect(typeof BootScene).toBe('function');
   });
-   it('Credit Scene is a function', () => {
+  it('Credit Scene is a function', () => {
     expect(typeof CreditScene).toBe('function');
   });
-   it('Game Scene is a function', () => {
+  it('Game Scene is a function', () => {
     expect(typeof GameScene).toBe('function');
   });
-   it('LeaderBoard Scene is a function', () => {
+  it('LeaderBoard Scene is a function', () => {
     expect(typeof LeaderBoardScene).toBe('function');
   });
-   it('Preloader Scene is a function', () => {
+  it('Preloader Scene is a function', () => {
     expect(typeof PreloaderScene).toBe('function');
   });
-   it('Title Scene is a function', () => {
+  it('Title Scene is a function', () => {
     expect(typeof TitleScene).toBe('function');
   });
 

@@ -2,6 +2,7 @@ const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 const Dotenv = require('dotenv-webpack');
+
 module.exports = {
   entry: {
     index: ['babel-polyfill', './src/index.js'],

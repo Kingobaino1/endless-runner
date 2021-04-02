@@ -1,4 +1,4 @@
-import 'phaser';
+import Phaser from 'phaser';
 
 export default {
   type: Phaser.AUTO,
@@ -9,5 +9,5 @@ export default {
     default: 'arcade',
     gravity: { y: 800 },
     debug: false,
-  }
+  },
 };

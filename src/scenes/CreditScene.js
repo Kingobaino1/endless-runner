@@ -1,9 +1,9 @@
-import phaser from 'phaser';
+import Phaser from 'phaser';
 
 class CreaditScene extends Phaser.Scene {
-  constructor(){
+  constructor() {
     super('Credits');
-  };
+  }
 
   create() {
     this.bgMusic = this.sound.add('bgMusic', { loop: true });
@@ -17,7 +17,7 @@ class CreaditScene extends Phaser.Scene {
       this.scene.stop();
       this.scene.start('Title');
     });
-  };
+  }
 }
 
 export default CreaditScene;
