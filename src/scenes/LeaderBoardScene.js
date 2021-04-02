@@ -7,11 +7,6 @@ class LeaderBoardScene extends Phaser.Scene {
     super('Score');
   }
 
-  preload()
-  {
-    this.load.image('back', 'back.png')
-  };
-
   create() {
     this.backButton = this.add.image(390, 440, 'back').setScale(0.8);
 

@@ -20,27 +20,15 @@ export default class GameScene extends Phaser.Scene {
 
   preload()
   {
-    this.load.image('background', 'bg.png');
-    this.load.image('sky', 'sky.png');
-    this.load.image('backdrop', 'backdrop.png');
-    this.load.image("platform", "grass.png");
-    this.load.image('water', 'water.png');
-    this.load.image('star', 'star.png');
     this.player = this.load.spritesheet('player', 
         'normal_walk.png',
         { frameWidth: 60, frameHeight: 95 }
     );
-    this.load.audio('playerMusic', ['player_move.mp3']);
-    // this.load.audio('bgMusic', ['bg_music.mp3']);
-
-
   }
 
   create()
   {
     this.playerMove = this.sound.add('playerMusic', { loop: false });
-    // this.bgMusic = this.sound.add('bgMusic', { loop: false });
-    // this.bgMusic.stop();
     this.playerMove.play();
     this.tileSprite = this.add.tileSprite(400, 240, 800, 480, 'background');
     this.sky = this.add.tileSprite(400, 240, 800, 480, 'sky');
@@ -51,46 +39,42 @@ export default class GameScene extends Phaser.Scene {
     this.player.setGravityY(gameOptions.playerGravity);
     this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 
-
-    
       // group with all active platforms.
-
-
         
-        this.platformGroup = this.add.group({
-             
-            // once a platform is removed, it's added to the pool
-            removeCallback: function(platform){
-                platform.scene.platformPool.add(platform)
-            }
-        });
+    this.platformGroup = this.add.group({
+         
+        // once a platform is removed, it's added to the pool
+        removeCallback: function(platform){
+            platform.scene.platformPool.add(platform)
+        }
+    });
  
         // pool
-        this.platformPool = this.add.group({
- 
-            // once a platform is removed from the pool, it's added to the active platforms group
-            removeCallback: function(platform){
-                platform.scene.platformGroup.add(platform);
-            }
-        });
+    this.platformPool = this.add.group({
+
+        // once a platform is removed from the pool, it's added to the active platforms group
+        removeCallback: function(platform){
+            platform.scene.platformGroup.add(platform);
+        }
+    });
  
         // number of consecutive jumps made by the player
-        this.playerJumps = 0;
- 
-        // adding a platform to the game, the arguments are platform width and x position
-        this.addPlatform(this.sys.game.config.width, this.sys.game.config.width / 2);
+    this.playerJumps = 0;
+
+    // adding a platform to the game, the arguments are platform width and x position
+    this.addPlatform(this.sys.game.config.width, this.sys.game.config.width / 2);
  
         // adding the player;
         
 
-        this.anims.create({
-        key: 'run',
-        frames: this.anims.generateFrameNumbers('player'),
-        frameRate: 16,
+    this.anims.create({
+      key: 'run',
+      frames: this.anims.generateFrameNumbers('player'),
+      frameRate: 16,
     });
  
         // setting collisions between the player and the platform group
-        this.physics.add.collider(this.player, this.platformGroup);
+    this.physics.add.collider(this.player, this.platformGroup);
 
  
         // checking for input
@@ -100,7 +84,7 @@ export default class GameScene extends Phaser.Scene {
         this.stars = this.physics.add.group({
           key: 'star',
           repeat: 5,
-          setXY: { x: 400, y: 240, stepX: 100 }
+          setXY: { x: 420, y: 0, stepX: 100, stepY: 10 }
         });
 
 
@@ -111,12 +95,14 @@ export default class GameScene extends Phaser.Scene {
        this.physics.add.collider(this.stars, this.platformGroup);
        this.physics.add.overlap(this.player, this.stars, collectStar, null, this);
 
-       function collectStar (player, star)
+       function collectStar (_player, star)
        {
           star.disableBody(true, true);
           gameOptions.score += 100;
           this.scoreText.setText('Score: ' + gameOptions.score);
+         
        }
+      
     }
 
  
@@ -160,17 +146,18 @@ export default class GameScene extends Phaser.Scene {
     this.tileSprite.tilePositionX += 1;
     this.sky.tilePositionX += .25;
     this.water.tilePositionX += .5;
-    this.backdrop.tilePositionX += .5;
+    this.backdrop.tilePositionX += 1;
 
     if(this.player.y > this.sys.game.config.height){
-        this.add.text(400, 300, 'Game Over', { fontsize: 48, fill: 'red' })
         const name = prompt('Please enter your name', 'Ikechukwu');
         if(name === null){
+            gameOptions.score = 0;
             this.scene.stop();
             this.playerMove.stop();
             this.scene.start('Title');
         } else if(name !== ''){
            populateScore(name, gameOptions.score);
+           gameOptions.score = 0;
            this.playerMove.stop();
            this.scene.start('Score')
         } else {

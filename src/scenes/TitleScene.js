@@ -31,7 +31,6 @@ class TitleScene extends Phaser.Scene {
       gameObjects[0].setTexture('blueButton1');
     });
 
-    // Options
 this.optionsButton = this.add.sprite(300, 200, 'blueButton1').setInteractive();
 this.centerButton(this.optionsButton);
  
