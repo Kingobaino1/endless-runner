@@ -1,3 +1,5 @@
+import 'regenerator-runtime/runtime';
+
 const populateScore = async(user, score) => {
   const data = {
     user,
