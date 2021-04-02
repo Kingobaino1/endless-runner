@@ -10,7 +10,7 @@ class TitleScene extends Phaser.Scene {
 
   create()
   {
-    this.bgMusic = this.sound.add('bgMusic', { loop: true });
+    this.bgMusic = this.sound.add('bgMusic', { loop: false });
     this.bgMusic.play();
     this.gameButton = this.add.sprite(100, 200, 'blueButton1').setInteractive();
     this.centerButton(this.gameButton, 1);
@@ -18,18 +18,18 @@ class TitleScene extends Phaser.Scene {
     this.gameText = this.add.text(0, 0, 'Play', { fontSize: '32px', fill: '#fff' });
     this.centerButtonText(this.gameText, this.gameButton);
      
-    this.gameButton.on('pointerdown', function (pointer) {
+    this.gameButton.on('pointerdown', ((_pointer) => {
       this.bgMusic.stop();
       this.scene.start('Game');
-    }.bind(this));
+    }).bind(this));
      
-    this.input.on('pointerover', function (event, gameObjects) {
+    this.input.on('pointerover', ((_event, gameObjects) => {
       gameObjects[0].setTexture('blueButton2');
-    });
+    }));
      
-    this.input.on('pointerout', function (event, gameObjects) {
+    this.input.on('pointerout', ((_event, gameObjects) => {
       gameObjects[0].setTexture('blueButton1');
-    });
+    }));
 
 this.optionsButton = this.add.sprite(300, 200, 'blueButton1').setInteractive();
 this.centerButton(this.optionsButton);
@@ -37,9 +37,10 @@ this.centerButton(this.optionsButton);
 this.optionsText = this.add.text(0, 0, 'Scores', { fontSize: '30px', fill: '#fff' });
 this.centerButtonText(this.optionsText, this.optionsButton);
  
-this.optionsButton.on('pointerdown', function (pointer) {
+this.optionsButton.on('pointerdown', ((_pointer) => {
+  this.bgMusic.stop();
   this.scene.start('Score');
-}.bind(this));
+}).bind(this));
  
 // Credits
 this.creditsButton = this.add.sprite(300, 200, 'blueButton1').setInteractive();
@@ -48,17 +49,18 @@ this.centerButton(this.creditsButton, -1);
 this.creditsText = this.add.text(0, 0, 'Credits', { fontSize: '32px', fill: '#fff' });
 this.centerButtonText(this.creditsText, this.creditsButton);
  
-this.creditsButton.on('pointerdown', function (pointer) {
+this.creditsButton.on('pointerdown', ((_pointer) => {
+  this.bgMusic.stop();
   this.scene.start('Credits');
-}.bind(this));
+}).bind(this));
  
-this.input.on('pointerover', function (event, gameObjects) {
+this.input.on('pointerover', ((_event, gameObjects) => {
   gameObjects[0].setTexture('blueButton2');
-});
+}));
  
-this.input.on('pointerout', function (event, gameObjects) {
+this.input.on('pointerout', ((_event, gameObjects) => {
   gameObjects[0].setTexture('blueButton1');
-});
+}));
   }
 
   centerButton (gameObject, offset = 0) {
