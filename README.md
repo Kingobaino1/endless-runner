@@ -13,7 +13,7 @@
 
 ## Live Demo
 
-[Live Demo](https://weather-reports.netlify.app/)
+[Live Demo](https://determined-lovelace-ffd671.netlify.app/)
 
 ## Getting Started
 
