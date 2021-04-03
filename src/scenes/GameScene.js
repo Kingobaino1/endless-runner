@@ -11,6 +11,7 @@ const gameOptions = {
   playerStartPosition: 200,
   jumps: 2,
   score: 0,
+  coin: false,
 };
 
 export default class GameScene extends Phaser.Scene {
@@ -36,76 +37,57 @@ export default class GameScene extends Phaser.Scene {
     this.player.setGravityY(gameOptions.playerGravity);
     this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 
-    // group with all active platforms.
-
     this.platformGroup = this.add.group({
-
-      // once a platform is removed, it's added to the pool
       removeCallback(platform) {
         platform.scene.platformPool.add(platform);
       },
     });
 
-    // pool
-    this.platformPool = this.add.group({
 
-      // once a platform is removed from the pool, it's added to the active platforms group
+    this.platformPool = this.add.group({
       removeCallback(platform) {
         platform.scene.platformGroup.add(platform);
       },
     });
-
-    // number of consecutive jumps made by the player
     this.playerJumps = 0;
 
-    // adding a platform to the game, the arguments are platform width and x position
     this.addPlatform(this.sys.game.config.width, this.sys.game.config.width / 2);
-
-    // adding the player;
-
 
     this.anims.create({
       key: 'run',
       frames: this.anims.generateFrameNumbers('player'),
       frameRate: 16,
     });
-
-    // setting collisions between the player and the platform group
     this.physics.add.collider(this.player, this.platformGroup);
-
-
-    // checking for input
 
     this.input.keyboard.on('keydown-UP', this.jump, this);
 
     this.stars = this.physics.add.group({
       key: 'star',
-      repeat: 5,
+      repeat: 10,
       setXY: {
-        x: 420, y: 0, stepX: 100, stepY: 10,
+        x: 420, y: 0, stepX: 70, stepY: 10,
       },
     });
-
 
     this.stars.children.iterate((child) => {
       child.setBounceY(0);
       child.setGravityY(100);
     });
-    this.physics.add.collider(this.stars, this.platformGroup);
-  
 
+    this.physics.add.collider(this.stars, this.platformGroup);
 
     function collectStar(_player, star) {
       star.destroy();
       gameOptions.score += 100;
       this.scoreText.setText(`Score: ${gameOptions.score}`);
+      star.y = 10;
+      star.x = 420;
     }
 
     this.physics.add.overlap(this.player, this.stars, collectStar, null, this);
   }
 
-
-  // the core of the script: platform are added from the pool or created on the fly
   addPlatform(platformWidth, posX) {
     let platform;
     if (this.platformPool.getLength()) {
@@ -125,9 +107,6 @@ export default class GameScene extends Phaser.Scene {
       gameOptions.spawnRange[1]);
   }
 
-  // the player jumps when on the ground,
-  // or once in the air as long as there are jumps left and
-  // the first jump was on the ground
   jump() {
     if (this.player.body.touching.down
         || (this.playerJumps > 0
@@ -144,6 +123,15 @@ export default class GameScene extends Phaser.Scene {
     if (this.player.body.touching.down) {
       this.player.anims.play('run', true);
     }
+
+    this.stars.children.iterate((child) => {
+      if (child.y > 480 || child.y < -10) {
+        child.y = -10;
+        child.x = 800;
+        child.setGravityY(100);
+      }
+    });
+
     this.tileSprite.tilePositionX += 1;
     this.sky.tilePositionX += 0.25;
     this.water.tilePositionX += 0.5;
