@@ -13,7 +13,7 @@
 
 ## Live Demo
 
-[Live Demo](https://determined-lovelace-ffd671.netlify.app/)
+[Live Demo](https://endless-runner-game-capstone.netlify.app/)
 
 ## Getting Started
 
