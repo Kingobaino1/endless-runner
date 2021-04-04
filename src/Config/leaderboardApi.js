@@ -39,7 +39,7 @@ const fetchScores = async (display) => {
     const final = await result;
     const arr = final.result;
     let i = 1;
-    arr.sort((a, b) => b.score - a.score).slice(0, 10).forEach((element) => {
+    return arr.sort((a, b) => b.score - a.score).slice(0, 10).forEach((element) => {
       display.text += `${i}. ${element.user} - [${element.score}] \n`;
       i += 1;
     });

@@ -138,7 +138,7 @@ export default class GameScene extends Phaser.Scene {
     this.backdrop.tilePositionX += 1;
 
     if (this.player.y > this.sys.game.config.height) {
-      const name = prompt('Please enter your name', 'Ikechukwu');
+      let name = prompt('Please enter your name', '');
       if (name === null) {
         gameOptions.score = 0;
         this.scene.stop();
@@ -150,12 +150,12 @@ export default class GameScene extends Phaser.Scene {
         this.playerMove.stop();
         this.scene.start('Score');
       } else {
-        alert('Please input a valid character');
+        name = '';
       }
     }
     this.player.x = gameOptions.playerStartPosition;
     let minDistance = this.sys.game.config.width;
-    this.platformGroup.getChildren().forEach(function (platform) {
+    this.platformGroup.getChildren().forEach((platform) => {
       const platformDistance = this.sys.game.config.width - platform.x - platform.displayWidth / 2;
       minDistance = Math.min(minDistance, platformDistance);
       if (platform.x < -platform.displayWidth / 2) {

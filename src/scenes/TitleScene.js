@@ -14,7 +14,7 @@ class TitleScene extends Phaser.Scene {
     this.gameText = this.add.text(0, 0, 'Play', { fontSize: '32px', fill: '#fff' });
     this.centerButtonText(this.gameText, this.gameButton);
 
-    this.gameButton.on('pointerdown', ((_pointer) => {
+    this.gameButton.on('pointerdown', (() => {
       this.bgMusic.stop();
       this.scene.start('Game');
     }));
@@ -33,7 +33,7 @@ class TitleScene extends Phaser.Scene {
     this.optionsText = this.add.text(0, 0, 'Scores', { fontSize: '30px', fill: '#fff' });
     this.centerButtonText(this.optionsText, this.optionsButton);
 
-    this.optionsButton.on('pointerdown', ((_pointer) => {
+    this.optionsButton.on('pointerdown', (() => {
       this.bgMusic.stop();
       this.scene.start('Score');
     }));
@@ -45,7 +45,7 @@ class TitleScene extends Phaser.Scene {
     this.creditsText = this.add.text(0, 0, 'Credits', { fontSize: '32px', fill: '#fff' });
     this.centerButtonText(this.creditsText, this.creditsButton);
 
-    this.creditsButton.on('pointerdown', ((_pointer) => {
+    this.creditsButton.on('pointerdown', (() => {
       this.bgMusic.stop();
       this.scene.start('Credits');
     }));
@@ -70,6 +70,7 @@ class TitleScene extends Phaser.Scene {
   }
 
   centerButtonText(gameText, gameButton) {
+    this.greetings = 'Hello world';
     Phaser.Display.Align.In.Center(
       gameText,
       gameButton,

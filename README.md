@@ -42,6 +42,9 @@ To run the integration Tests locally using Jest, just type the following command
 ```
 npm test
 ```
+For more information about the game click the link below:
+- [GDD](https://docs.google.com/document/d/1_RQ7UICXEsKZjqPA90Sf1j6OVHJvZnB5YpZ7dDMo63o/edit?usp=sharing)
+
 
 ## Author
 
